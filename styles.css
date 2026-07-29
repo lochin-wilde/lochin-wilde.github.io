@@ -452,6 +452,80 @@ a:focus-visible {
   color: var(--text-muted);
 }
 
+.project-card {
+  padding: 28px 28px 30px;
+  border-radius: var(--radius-lg);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-soft);
+}
+
+.project-head {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.project-title {
+  margin: 0;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+}
+
+.badge {
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.project-text {
+  margin: 0;
+  max-width: 62ch;
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--text-muted);
+}
+
+.feature-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 24px;
+  margin: 22px 0 26px;
+  padding: 0;
+  list-style: none;
+}
+
+.feature-list li {
+  position: relative;
+  padding-left: 22px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.feature-list li::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 8px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.project-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
 .site-footer {
   padding: 32px 0 36px;
 }
@@ -514,6 +588,10 @@ a:focus-visible {
   .cards-grid {
     grid-template-columns: minmax(0, 1fr);
   }
+
+  .feature-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 @media (max-width: 520px) {
@@ -532,5 +610,9 @@ a:focus-visible {
 
   .btn {
     width: 100%;
+  }
+
+  .project-card {
+    padding: 22px 20px 24px;
   }
 }
