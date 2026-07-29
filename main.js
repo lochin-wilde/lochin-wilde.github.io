@@ -15,6 +15,7 @@ const translations = {
     navAbout: "Обо мне",
     navServices: "Услуги",
     navWorks: "Музыка",
+    navPrograms: "Программы",
     navContacts: "Контакты",
     aboutTitle: "Кто я",
     aboutLead:
@@ -37,6 +38,18 @@ const translations = {
     worksLead:
       "Выберите удобную платформу и послушайте, как я работаю с настроением и пространством.",
     worksCta: "Слушать музыку на всех платформах",
+    programsTitle: "Программы",
+    programsLead:
+      "Инструменты, которые я делаю для себя и для коллег по цеху.",
+    sortirTitle: "Музыкальный сортир",
+    sortirBadge: "Закрытое тестирование",
+    sortirText:
+      "Раскладывает диджейскую фонотеку по жанрам, определяет BPM и тональность в системе Camelot, выравнивает громкость. Работает целиком в браузере: ничего не нужно устанавливать, а файлы никуда не загружаются — весь разбор идёт на вашем компьютере.",
+    sortirFeature1: "Разбор фонотеки по жанрам",
+    sortirFeature2: "BPM и тональность в Camelot",
+    sortirFeature3: "Выравнивание громкости",
+    sortirFeature4: "Ничего не нужно устанавливать",
+    sortirCta: "Запросить доступ",
     contactsTitle: "Контакты",
     contactsLead: "Выберите удобный способ связи, чтобы обсудить задачу.",
     contactsInstagram: "Instagram",
@@ -59,6 +72,7 @@ const translations = {
     navAbout: "About",
     navServices: "Services",
     navWorks: "Music",
+    navPrograms: "Programs",
     navContacts: "Contacts",
     aboutTitle: "Who I am",
     aboutLead:
@@ -80,6 +94,17 @@ const translations = {
     worksLead:
       "Pick your platform and listen to how I work with mood, space and dynamics.",
     worksCta: "Listen on all platforms",
+    programsTitle: "Programs",
+    programsLead: "Tools I build for myself and for fellow DJs.",
+    sortirTitle: "Musical Sortir",
+    sortirBadge: "Closed beta",
+    sortirText:
+      "Sorts a DJ library by genre, detects BPM and Camelot key, and evens out loudness. It runs entirely in the browser: nothing to install, and your files are never uploaded — everything is analysed on your own machine.",
+    sortirFeature1: "Library sorted by genre",
+    sortirFeature2: "BPM and Camelot key",
+    sortirFeature3: "Loudness levelling",
+    sortirFeature4: "Nothing to install",
+    sortirCta: "Request access",
     contactsTitle: "Contacts",
     contactsLead: "Choose a convenient way to get in touch.",
     contactsInstagram: "Instagram",
