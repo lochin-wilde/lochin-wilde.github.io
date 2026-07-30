@@ -1,0 +1,7 @@
+# Everything here is meant to be found. The one thing worth stating is where the
+# sitemap is, since that is how the English page gets discovered rather than
+# waiting to be crawled into.
+User-agent: *
+Allow: /
+
+Sitemap: https://lochin-wilde.github.io/sitemap.xml
