@@ -22,12 +22,28 @@
     -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'none'; style-src 'self'; script-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'"
+      content="default-src 'none'; style-src 'self'; script-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src https://w.soundcloud.com; form-action 'none'; base-uri 'none'"
     />
     <meta name="referrer" content="no-referrer" />
 
     <link rel="canonical" href="https://lochin-wilde.github.io/" />
     <meta name="theme-color" content="#f5f5f7" />
+
+    <!--
+      Each language gets its own address, because a search engine indexes URLs.
+      Both versions used to live here and be swapped by script, which meant
+      Google saw one Russian page and the English text was never indexed at all.
+
+      x-default points at the Russian page as the one to serve when no language
+      matches, since that is the audience this site is written for first.
+    -->
+    <link rel="alternate" hreflang="ru" href="https://lochin-wilde.github.io/" />
+    <link rel="alternate" hreflang="en" href="https://lochin-wilde.github.io/en/" />
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href="https://lochin-wilde.github.io/"
+    />
 
     <!-- Link previews in Telegram, Instagram DMs and messengers, which is how
          this address will actually be passed around. -->
@@ -74,9 +90,14 @@
           <a href="#contacts" data-i18n="navContacts">Контакты</a>
         </nav>
         <div class="header-controls">
+          <!--
+            Real links, not buttons. A crawler follows an href and never a click
+            handler, so the English page was invisible while this was a script
+            that swapped text in place. aria-current marks which one you are on.
+          -->
           <div class="lang-switch">
-            <button class="lang-btn is-active" data-lang="en">EN</button>
-            <button class="lang-btn" data-lang="ru">RU</button>
+            <a class="lang-btn is-active" href="/" hreflang="ru" aria-current="page">RU</a>
+            <a class="lang-btn" href="/en/" hreflang="en">EN</a>
           </div>
           <!-- Shown only on narrow screens, where the nav above collapses.
                Marked up as a real button with aria-expanded so it announces its
@@ -212,27 +233,52 @@
       </section>
 
       <section id="works" class="section section-muted">
-        <div class="container two-column" data-reveal>
-          <div>
+        <div class="container">
+          <div class="section-header" data-reveal>
             <h2 class="section-title" data-i18n="worksTitle">Музыка и релизы</h2>
             <p class="section-lead" data-i18n="worksLead">
-              Выберите удобную платформу и послушайте, как я работаю с
-              настроением и пространством.
+              Послушайте прямо здесь, как я работаю с настроением и
+              пространством.
             </p>
           </div>
-          <div class="section-text">
-            <p>
-              <a
-                href="https://band.link/Lochin"
-                target="_blank"
-                rel="noreferrer"
-                class="btn btn-primary"
-                data-i18n="worksCta"
-              >
-                Слушать музыку на всех платформах
-              </a>
-            </p>
+
+          <!--
+            The SoundCloud player is not loaded until someone asks for it.
+
+            An embedded iframe runs SoundCloud's scripts and sets their cookies
+            on every visit, including for readers who never press play — and
+            this page otherwise has no third-party content at all. So what ships
+            is a button; the iframe replaces it on click, which is the moment
+            the visitor has actually chosen to involve SoundCloud.
+
+            It also keeps the page fast: the embed is several hundred kilobytes
+            that most visitors would never use.
+          -->
+          <div class="player" id="player" data-reveal>
+            <button type="button" class="player-facade" id="player-load">
+              <span class="player-play" aria-hidden="true"></span>
+              <span class="player-facade-text">
+                <span class="player-facade-title" data-i18n="playerTitle">
+                  Слушать на SoundCloud
+                </span>
+                <span class="player-facade-note" data-i18n="playerNote">
+                  Плеер загрузится по нажатию — до этого страница не обращается
+                  к SoundCloud.
+                </span>
+              </span>
+            </button>
           </div>
+
+          <p class="player-alt">
+            <a
+              href="https://band.link/Lochin"
+              target="_blank"
+              rel="noreferrer"
+              data-i18n="worksCta"
+            >
+              Слушать музыку на всех платформах
+            </a>
+          </p>
         </div>
       </section>
 

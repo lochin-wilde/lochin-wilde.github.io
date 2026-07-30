@@ -37,8 +37,11 @@ const translations = {
       "Чистый баланс, глубина и динамика. Подготовка материала к релизу или интеграции в игру, фильм, рекламу или платформы.",
     worksTitle: "Музыка и релизы",
     worksLead:
-      "Выберите удобную платформу и послушайте, как я работаю с настроением и пространством.",
+      "Послушайте прямо здесь, как я работаю с настроением и пространством.",
     worksCta: "Слушать музыку на всех платформах",
+    playerTitle: "Слушать на SoundCloud",
+    playerNote:
+      "Плеер загрузится по нажатию — до этого страница не обращается к SoundCloud.",
     programsTitle: "Программы",
     programsLead:
       "Инструменты, которые я делаю для себя и для коллег по цеху.",
@@ -96,9 +99,11 @@ const translations = {
     service3Text:
       "Clear balance, depth and dynamics. Preparing material for release or integration into games, film, ads or platforms.",
     worksTitle: "Music and releases",
-    worksLead:
-      "Pick your platform and listen to how I work with mood, space and dynamics.",
+    worksLead: "Listen right here to how I work with mood, space and dynamics.",
     worksCta: "Listen on all platforms",
+    playerTitle: "Listen on SoundCloud",
+    playerNote:
+      "The player loads when you press it — until then this page does not contact SoundCloud.",
     programsTitle: "Programs",
     programsLead: "Tools I build for myself and for fellow DJs.",
     sortirTitle: "Musical Sortir",
@@ -155,28 +160,25 @@ function applyLanguage(lang) {
     if (key && key in dict) el.setAttribute("aria-label", dict[key]);
   });
 
-  document
-    .querySelectorAll(".lang-btn")
-    .forEach((btn) => btn.classList.toggle("is-active", btn.dataset.lang === lang));
+  // Which language is current is now a property of the address, so the switch
+  // marks itself in the markup of each page rather than being set from here.
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Initial language: Russian for ru-locale users, otherwise English
-  const browserLang = (
-    navigator.language ||
-    navigator.userLanguage ||
-    ""
-  ).toLowerCase();
-  const initialLang = browserLang.startsWith("ru") ? "ru" : "en";
-  applyLanguage(initialLang);
-
-  // Switcher
-  document.querySelectorAll(".lang-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const lang = btn.dataset.lang;
-      applyLanguage(lang);
-    });
-  });
+  /*
+   * The page states its own language, and that is the only thing consulted.
+   *
+   * This used to read navigator.language and rewrite the page to match, which
+   * had two costs. A visitor on /en/ with a Russian browser was served Russian
+   * on an English URL, and every visitor saw the markup for a moment before the
+   * script replaced it. Now each address is one language throughout, and
+   * switching is a link rather than a rewrite.
+   *
+   * The dictionaries still run, because they carry what markup cannot: the
+   * current year in the footer, and the aria-labels for controls that have no
+   * text of their own.
+   */
+  applyLanguage(document.documentElement.lang === "en" ? "en" : "ru");
 
   /*
    * Menu for narrow screens.
@@ -218,6 +220,38 @@ document.addEventListener("DOMContentLoaded", () => {
     // would apply .is-open to a nav that is no longer a panel.
     window.matchMedia("(min-width: 881px)").addEventListener("change", (event) => {
       if (event.matches) setMenu(false);
+    });
+  }
+
+  /*
+   * The SoundCloud embed, loaded on demand.
+   *
+   * Building the iframe here rather than shipping it in the HTML is what keeps
+   * the page free of third-party code until a visitor asks for music. The
+   * button is replaced rather than hidden, so nothing is left behind to tab to.
+   *
+   * auto_play is on because the only way to get here is by pressing play, and
+   * a player that then needs a second press reads as broken.
+   */
+  const playerBox = document.getElementById("player");
+  const playerButton = document.getElementById("player-load");
+
+  if (playerBox && playerButton) {
+    playerButton.addEventListener("click", () => {
+      const frame = document.createElement("iframe");
+      frame.src =
+        "https://w.soundcloud.com/player/?url=" +
+        encodeURIComponent("https://soundcloud.com/lochin") +
+        "&color=%232563eb&auto_play=true&show_user=true&hide_related=true";
+      frame.title = "SoundCloud";
+      frame.allow = "autoplay";
+      frame.loading = "lazy";
+      // Nothing here needs to reach back into the page, and the embed is
+      // third-party code, so it gets the narrowest sandbox that still plays:
+      // its own scripts and its own origin, no forms and no top-level
+      // navigation of this page.
+      frame.setAttribute("sandbox", "allow-scripts allow-same-origin allow-popups");
+      playerBox.replaceChildren(frame);
     });
   }
 

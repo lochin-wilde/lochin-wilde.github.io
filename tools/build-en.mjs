@@ -1,0 +1,117 @@
+/*
+ * Generates en/index.html from index.html and the English dictionary.
+ *
+ * Two addresses are needed for the English text to be indexed at all, and two
+ * addresses mean two copies of the markup. Writing the second by hand is the
+ * trap this repository already fell into once: the page described a web
+ * developer's services while the title described a composer, and nothing looked
+ * wrong in a browser because the script overwrote it a moment later.
+ *
+ * So the English page is generated, never edited. Change index.html or the
+ * dictionaries, then run:
+ *
+ *   node tools/build-en.mjs
+ *
+ * There is still no build step for *serving* the site -- what is committed is
+ * plain HTML that any static host can hand out. This is a source tool, run when
+ * the text changes, not a pipeline anything depends on at runtime.
+ */
+import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+
+const ROOT = new URL("..", import.meta.url).pathname;
+const html = readFileSync(ROOT + "index.html", "utf8");
+const main = readFileSync(ROOT + "main.js", "utf8");
+
+/*
+ * The dictionaries are read out of main.js by evaluating just the object, so
+ * there is one copy of the strings rather than a second list living here.
+ */
+const start = main.indexOf("const translations");
+const end = main.indexOf("function applyLanguage");
+const { en } = new Function(main.slice(start, end) + "; return translations;")();
+
+const escapeHtml = (s) => String(s)
+  .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+/*
+ * Replaces the contents of every element carrying data-i18n.
+ *
+ * The markup here is written by hand and stays simple -- one level of nesting
+ * inside a translated element, and only for aboutBody, whose blank-line-
+ * separated text becomes paragraphs exactly as applyLanguage() renders it in
+ * the browser. A general HTML parser would be the right tool for arbitrary
+ * markup and overkill for this.
+ */
+let out = html.replace(
+  /(<(\w+)([^>]*\bdata-i18n="([^"]+)"[^>]*)>)([\s\S]*?)(<\/\2>)/g,
+  (whole, open, tag, attrs, key, inner, close) => {
+    if (!(key in en)) return whole;
+    const value = en[key];
+    const body = value.includes("\n\n")
+      ? value.split("\n\n").map((p) => `\n              <p>${escapeHtml(p)}</p>`).join("") + "\n            "
+      : escapeHtml(value);
+    return open + body + close;
+  });
+
+/*
+ * Labels that are read out rather than shown, carried in aria-label with the
+ * key in data-i18n-aria. The script sets these too, but the static value is
+ * what a screen reader meets before the script runs -- and it is markup, so it
+ * has to be translated here like any other text.
+ */
+out = out.replace(
+  /aria-label="[^"]*"([\s\S]{0,120}?data-i18n-aria="([^"]+)")/g,
+  (whole, rest, key) => (key in en ? `aria-label="${escapeHtml(en[key])}"${rest}` : whole));
+
+const swaps = [
+  // Language of the document itself, and of the copy the crawler reads.
+  [/<html lang="ru">/, '<html lang="en">'],
+  [/<title>[^<]*<\/title>/, "<title>Lochin Wilde — composer and sound designer</title>"],
+  [/(<meta\s+name="description"\s+content=")[^"]*(")/,
+   "$1Music, sound design and mixing by Lochin Wilde: original scores, sound worlds and a clean mix for games, film and brands.$2"],
+
+  // Each page points at itself, or the two compete for the same ranking.
+  [/<link rel="canonical" href="https:\/\/lochin-wilde\.github\.io\/" \/>/,
+   '<link rel="canonical" href="https://lochin-wilde.github.io/en/" />'],
+  [/<meta property="og:url" content="https:\/\/lochin-wilde\.github\.io\/" \/>/,
+   '<meta property="og:url" content="https://lochin-wilde.github.io/en/" />'],
+  [/(<meta\s+property="og:title"\s+content=")[^"]*(")/,
+   "$1Lochin Wilde — composer and sound designer$2"],
+  [/(<meta\s+property="og:description"\s+content=")[^"]*(")/,
+   "$1Original music, sound design and mixing for games, film and brands.$2"],
+  [/<meta property="og:locale" content="ru_RU" \/>/,
+   '<meta property="og:locale" content="en_US" />'],
+  [/<meta property="og:locale:alternate" content="en_US" \/>/,
+   '<meta property="og:locale:alternate" content="ru_RU" />'],
+
+  // Assets stay at the root; only this page moved down a directory.
+  [/href="styles\.css"/, 'href="../styles.css"'],
+  [/src="main\.js"/, 'src="../main.js"'],
+  [/href="\/en\/" hreflang="en"/, 'href="/en/" hreflang="en" aria-current="page"'],
+  [/<a class="lang-btn is-active" href="\/" hreflang="ru" aria-current="page">RU<\/a>/,
+   '<a class="lang-btn" href="/" hreflang="ru">RU</a>'],
+  [/<a class="lang-btn" href="\/en\/" hreflang="en" aria-current="page">EN<\/a>/,
+   '<a class="lang-btn is-active" href="/en/" hreflang="en" aria-current="page">EN</a>'],
+];
+
+for (const [pattern, replacement] of swaps) {
+  if (!pattern.test(out)) {
+    console.error("не найдено в index.html:", pattern);
+    process.exitCode = 1;
+  }
+  out = out.replace(pattern, replacement);
+}
+
+out = out.replace(
+  /^<!doctype html>/,
+  "<!doctype html>\n<!-- Generated by tools/build-en.mjs from index.html. Do not edit by hand. -->");
+
+mkdirSync(ROOT + "en", { recursive: true });
+writeFileSync(ROOT + "en/index.html", out);
+
+const left = (out.match(/[А-Яа-яЁё]/g) || []).length;
+console.log("en/index.html записан");
+console.log(left === 0
+  ? "  кириллицы не осталось"
+  : `  ВНИМАНИЕ: осталось кириллических символов: ${left}`);
+if (left > 0) process.exitCode = 1;

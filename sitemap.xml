@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Two pages, each declaring the other as its translation.
+
+  The hreflang links in the pages themselves say the same thing; a sitemap
+  repeats it in the one place a crawler reads before visiting anything, which is
+  what gets the English page discovered rather than stumbled upon.
+-->
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <url>
+    <loc>https://lochin-wilde.github.io/</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://lochin-wilde.github.io/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lochin-wilde.github.io/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lochin-wilde.github.io/"/>
+  </url>
+
+  <url>
+    <loc>https://lochin-wilde.github.io/en/</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://lochin-wilde.github.io/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://lochin-wilde.github.io/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://lochin-wilde.github.io/"/>
+  </url>
+
+</urlset>
