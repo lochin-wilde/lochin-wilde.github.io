@@ -172,6 +172,79 @@ button {
   width: 100%;
 }
 
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 0 0 auto;
+}
+
+/*
+ * The menu button exists only below 880px, where .main-nav collapses. Hidden
+ * with `display: none` rather than visibility, so it is out of the tab order on
+ * wide screens instead of being a focusable control nobody can see.
+ */
+.nav-toggle {
+  display: none;
+  width: 38px;
+  height: 34px;
+  padding: 0;
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  background: var(--bg-elevated);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s ease;
+}
+
+.nav-toggle:hover {
+  border-color: var(--accent);
+}
+
+.nav-toggle-bars,
+.nav-toggle-bars::before,
+.nav-toggle-bars::after {
+  display: block;
+  width: 16px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--text-main);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.nav-toggle-bars {
+  position: relative;
+}
+
+.nav-toggle-bars::before,
+.nav-toggle-bars::after {
+  content: "";
+  position: absolute;
+  left: 0;
+}
+
+.nav-toggle-bars::before {
+  top: -5px;
+}
+
+.nav-toggle-bars::after {
+  top: 5px;
+}
+
+/* Three lines fold into a cross, so the button says what it will do next. */
+.nav-toggle[aria-expanded="true"] .nav-toggle-bars {
+  background: transparent;
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-bars::before {
+  transform: translateY(5px) rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-bars::after {
+  transform: translateY(-5px) rotate(-45deg);
+}
+
 .lang-switch {
   display: flex;
   align-items: center;
@@ -575,8 +648,47 @@ a:focus-visible {
     gap: 16px;
   }
 
+  .nav-toggle {
+    display: inline-flex;
+  }
+
+  /*
+   * Below this width the nav becomes a panel under the header. It used to be
+   * `display: none` with nothing in its place, which left the site with no
+   * navigation at all on a phone -- five sections reachable only by scrolling.
+   */
   .main-nav {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
     display: none;
+    flex-direction: column;
+    gap: 4px;
+    margin: 0 16px;
+    padding: 10px 14px 14px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--bg-elevated);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .main-nav.is-open {
+    display: flex;
+  }
+
+  .main-nav a {
+    padding: 9px 2px;
+    font-size: 15px;
+  }
+
+  /* The underline animation belongs to a horizontal bar, not a stacked list. */
+  .main-nav a::after {
+    display: none;
+  }
+
+  .header-inner {
+    position: relative;
   }
 
   .hero-inner {

@@ -8,6 +8,50 @@
       name="description"
       content="Музыка, саунд‑дизайн и звукорежиссура от Лочина Уайльда: оригинальные саундтреки, звуковые миры и чистый микс для игр, кино и брендов."
     />
+
+    <!--
+      GitHub Pages serves static files and cannot set response headers, so the
+      policy has to travel in the document itself. Everything here is
+      first-party — no CDN, no analytics, no embeds — so it needs no exceptions.
+
+      Two directives that only work as a real header are deliberately absent:
+      frame-ancestors and X-Frame-Options are ignored in a meta tag. Clickjacking
+      is therefore not blocked; on a page with no forms and no logged-in state
+      there is nothing to steal by framing it. Moving to a host that can set
+      headers would be the way to close that.
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; style-src 'self'; script-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'"
+    />
+    <meta name="referrer" content="no-referrer" />
+
+    <link rel="canonical" href="https://lochin-wilde.github.io/" />
+    <meta name="theme-color" content="#f5f5f7" />
+
+    <!-- Link previews in Telegram, Instagram DMs and messengers, which is how
+         this address will actually be passed around. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://lochin-wilde.github.io/" />
+    <meta
+      property="og:title"
+      content="Лочин Уайльд — композитор и саунд‑дизайнер"
+    />
+    <meta
+      property="og:description"
+      content="Оригинальная музыка, саунд‑дизайн и сведение для игр, кино и брендов."
+    />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta name="twitter:card" content="summary" />
+
+    <!-- Inline so it costs no request, and so the tab never shows the broken
+         default while a separate file 404s. -->
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%232563eb'/%3E%3Cpath d='M12 21V11l9-2v10' stroke='white' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='10' cy='21' r='2.6' fill='white'/%3E%3Ccircle cx='19' cy='19' r='2.6' fill='white'/%3E%3C/svg%3E"
+    />
+
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -22,16 +66,33 @@
             </span>
           </div>
         </div>
-        <nav class="main-nav">
+        <nav class="main-nav" id="main-nav">
           <a href="#about" data-i18n="navAbout">Обо мне</a>
           <a href="#services" data-i18n="navServices">Услуги</a>
           <a href="#works" data-i18n="navWorks">Музыка</a>
           <a href="#programs" data-i18n="navPrograms">Программы</a>
           <a href="#contacts" data-i18n="navContacts">Контакты</a>
         </nav>
-        <div class="lang-switch">
-          <button class="lang-btn is-active" data-lang="en">EN</button>
-          <button class="lang-btn" data-lang="ru">RU</button>
+        <div class="header-controls">
+          <div class="lang-switch">
+            <button class="lang-btn is-active" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="ru">RU</button>
+          </div>
+          <!-- Shown only on narrow screens, where the nav above collapses.
+               Marked up as a real button with aria-expanded so it announces its
+               state; the label is set from the dictionary because the button
+               itself is three lines and has no text to translate. -->
+          <button
+            type="button"
+            class="nav-toggle"
+            id="nav-toggle"
+            aria-expanded="false"
+            aria-controls="main-nav"
+            aria-label="Меню"
+            data-i18n-aria="navToggleLabel"
+          >
+            <span class="nav-toggle-bars" aria-hidden="true"></span>
+          </button>
         </div>
       </div>
     </header>
