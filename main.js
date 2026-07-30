@@ -19,7 +19,7 @@ const translations = {
     navContacts: "Контакты",
     aboutTitle: "Кто я",
     aboutLead:
-      "Лочин Уайльд, 28 лет. Композитор, саунд‑дизайнер и звукорежиссёр, в музыке с 2009 года, профессионально — с 2011.",
+      "Лочин Уайльд, 29 лет. Композитор, саунд‑дизайнер и звукорежиссёр, в музыке с 2009 года, профессионально — с 2011.",
     aboutBody:
       "Работаю на стыке музыки и звука: пишу оригинальные саундтреки, создаю саунд‑дизайн и занимаюсь сведением/мастерингом. Мне важны драматургия, настроение и то, как звук помогает истории раскрыться.\n\nОткрыт к работе с играми, кино и сериалами, рекламой, онлайн‑курсами, подкастами и личными брендами. Форматы — от точечных задач до полного сопровождения проекта по звуку.",
     servicesTitle: "Услуги",
@@ -76,7 +76,7 @@ const translations = {
     navContacts: "Contacts",
     aboutTitle: "Who I am",
     aboutLead:
-      "Lochin Wilde, 28. Composer, sound designer and mixing engineer — in music since 2009, more in‑depth since 2011.",
+      "Lochin Wilde, 29. Composer, sound designer and mixing engineer — in music since 2009, more in‑depth since 2011.",
     aboutBody:
       "I work where music meets sound: composing original scores, building soundscapes and handling mixing/mastering. I focus on storytelling, mood, and the way audio helps the project speak.\n\nOpen to working with games, films and series, ads, online courses, podcasts and personal brands. Formats range from one‑off tasks to full audio supervision.",
     servicesTitle: "Services",
