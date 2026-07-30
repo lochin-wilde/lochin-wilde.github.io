@@ -526,6 +526,12 @@ a:focus-visible {
   gap: 12px;
 }
 
+.project-note {
+  margin: 14px 0 0;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
 .site-footer {
   padding: 32px 0 36px;
 }
