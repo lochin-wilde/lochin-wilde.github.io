@@ -17,6 +17,7 @@ const translations = {
     navWorks: "Музыка",
     navPrograms: "Программы",
     navContacts: "Контакты",
+    navToggleLabel: "Меню",
     aboutTitle: "Кто я",
     aboutLead:
       "Лочин Уайльд, 29 лет. Композитор, саунд‑дизайнер и звукорежиссёр, в музыке с 2009 года, профессионально — с 2011.",
@@ -77,6 +78,7 @@ const translations = {
     navWorks: "Music",
     navPrograms: "Programs",
     navContacts: "Contacts",
+    navToggleLabel: "Menu",
     aboutTitle: "Who I am",
     aboutLead:
       "Lochin Wilde, 29. Composer, sound designer and mixing engineer — in music since 2009, more in‑depth since 2011.",
@@ -131,19 +133,26 @@ function applyLanguage(lang) {
 
     const value = dict[key];
     if (typeof value === "string" && value.includes("\n")) {
-      el.innerHTML = "";
-      value.split("\n\n").forEach((block, index) => {
+      // Blank-line-separated text becomes real paragraphs. textContent is used
+      // per paragraph rather than innerHTML on the whole block, so a translation
+      // string can never introduce markup.
+      el.textContent = "";
+      value.split("\n\n").forEach((block) => {
         const p = document.createElement("p");
         p.textContent = block;
-        if (index === 0) {
-          el.appendChild(p);
-        } else {
-          el.appendChild(p);
-        }
+        el.appendChild(p);
       });
     } else {
       el.textContent = value;
     }
+  });
+
+  // Labels that are read out rather than shown. The menu button has no text of
+  // its own -- it is three lines -- so without this it stays English for a
+  // Russian screen-reader user.
+  document.querySelectorAll("[data-i18n-aria]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-aria");
+    if (key && key in dict) el.setAttribute("aria-label", dict[key]);
   });
 
   document
@@ -168,6 +177,49 @@ document.addEventListener("DOMContentLoaded", () => {
       applyLanguage(lang);
     });
   });
+
+  /*
+   * Menu for narrow screens.
+   *
+   * aria-expanded on the button is the single source of truth: the CSS reads it
+   * for the open/closed icon, and assistive technology reads it for the state.
+   * Keeping the class on the nav in step with it means there is one thing to
+   * get right rather than two that can disagree.
+   */
+  const navToggle = document.getElementById("nav-toggle");
+  const mainNav = document.getElementById("main-nav");
+
+  if (navToggle && mainNav) {
+    const setMenu = (open) => {
+      navToggle.setAttribute("aria-expanded", String(open));
+      mainNav.classList.toggle("is-open", open);
+    };
+
+    navToggle.addEventListener("click", () => {
+      setMenu(navToggle.getAttribute("aria-expanded") !== "true");
+    });
+
+    // Following a link scrolls the page behind the open panel, so it has to
+    // close itself; otherwise the section the user picked is hidden by it.
+    mainNav.addEventListener("click", (event) => {
+      if (event.target.closest("a")) setMenu(false);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape") return;
+      if (navToggle.getAttribute("aria-expanded") !== "true") return;
+      setMenu(false);
+      // Focus goes back to what opened the panel, rather than being left on an
+      // element that is now hidden.
+      navToggle.focus();
+    });
+
+    // A panel left open while the layout widens back into a horizontal bar
+    // would apply .is-open to a nav that is no longer a panel.
+    window.matchMedia("(min-width: 881px)").addEventListener("change", (event) => {
+      if (event.matches) setMenu(false);
+    });
+  }
 
   const revealItems = document.querySelectorAll("[data-reveal]");
   const prefersReducedMotion = window.matchMedia(
