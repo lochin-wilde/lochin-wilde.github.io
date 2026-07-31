@@ -58,6 +58,11 @@ never presses play is never handed SoundCloud's scripts or cookies, and the page
 stays free of third-party code by default rather than by promise. The iframe is
 sandboxed to scripts, its own origin and pop-ups when it does arrive.
 
+The button says only "Listen on SoundCloud". It carried a line explaining that
+nothing loads until you press it, which is a fact about the implementation and
+not about the music — the kind of sentence that reads as written by a machine
+rather than by the person whose site this is.
+
 Two protections cannot be delivered this way: `frame-ancestors` and
 `X-Frame-Options` are ignored inside a meta tag, so framing is not blocked.
 There is no form, no login and no stored state on this page, so there is nothing

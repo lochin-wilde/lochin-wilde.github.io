@@ -581,23 +581,10 @@ a:focus-visible {
   border-color: transparent transparent transparent #fff;
 }
 
-.player-facade-text {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
 .player-facade-title {
   font-size: 17px;
   font-weight: 600;
   letter-spacing: -0.01em;
-}
-
-.player-facade-note {
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--text-muted);
-  max-width: 46ch;
 }
 
 .player iframe {

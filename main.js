@@ -40,8 +40,6 @@ const translations = {
       "Послушайте прямо здесь, как я работаю с настроением и пространством.",
     worksCta: "Слушать музыку на всех платформах",
     playerTitle: "Слушать на SoundCloud",
-    playerNote:
-      "Плеер загрузится по нажатию — до этого страница не обращается к SoundCloud.",
     programsTitle: "Программы",
     programsLead:
       "Инструменты, которые я делаю для себя и для коллег по цеху.",
@@ -102,8 +100,6 @@ const translations = {
     worksLead: "Listen right here to how I work with mood, space and dynamics.",
     worksCta: "Listen on all platforms",
     playerTitle: "Listen on SoundCloud",
-    playerNote:
-      "The player loads when you press it — until then this page does not contact SoundCloud.",
     programsTitle: "Programs",
     programsLead: "Tools I build for myself and for fellow DJs.",
     // Transliterated, not translated. "Сортир" is coarse slang for a toilet,
