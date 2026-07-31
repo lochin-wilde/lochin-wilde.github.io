@@ -106,7 +106,10 @@ const translations = {
       "The player loads when you press it — until then this page does not contact SoundCloud.",
     programsTitle: "Programs",
     programsLead: "Tools I build for myself and for fellow DJs.",
-    sortirTitle: "Musical Sortir",
+    // Transliterated, not translated. "Сортир" is coarse slang for a toilet,
+    // so an English rendering of the joke reads far ruder than the Russian
+    // does. The name travels as a name.
+    sortirTitle: "Muzykalny Sortir",
     sortirBadge: "Closed beta",
     sortirText:
       "Sorts a DJ library by genre, detects BPM and Camelot key, and evens out loudness. It runs entirely in the browser: nothing to install, and your files are never uploaded — everything is analysed on your own machine.",
