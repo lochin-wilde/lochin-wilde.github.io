@@ -69,6 +69,26 @@ There is no form, no login and no stored state on this page, so there is nothing
 to capture by framing it; closing that gap properly would mean moving to a host
 that can set headers.
 
+## Hosting
+
+GitHub Pages serves this site, and nothing else does. Asked for its headers it
+answers `server: GitHub.com`; the app linked from the Programs section, at
+`sortirovator.pages.dev`, answers `server: cloudflare`. Two projects, two hosts,
+and only one of them sits behind Cloudflare.
+
+The split follows from what each one needs. The app runs code on every request —
+an invite gate, a rate limiter, writes to a database — which is what Cloudflare
+Pages Functions are for. This site is files, and files need no request handler.
+
+Cloudflare could not front this site in any case. It works by taking over a
+domain's DNS records, and `lochin-wilde.github.io` is a name GitHub owns, not
+one that can be pointed elsewhere. That same missing domain is why the app's
+rate limiting had to be written into its code rather than configured as a
+firewall rule — those rules attach to a domain, and there is none.
+
+What a move would buy is real response headers, closing the framing gap
+described above. What it costs is a domain.
+
 ## Local preview
 
 ```bash
